@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Community Bot</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0c12;color:#f1f3f9;font-family:Arial,sans-serif}
+.app{display:flex;min-height:100vh}
+aside{width:220px;background:#10131c;border-right:1px solid #242838;padding:24px 15px}
+.logo{font-size:22px;font-weight:bold;margin-bottom:35px}
+.logo span{color:#8b72ff}
+.nav{display:block;width:100%;text-align:left;padding:13px;margin:5px 0;background:transparent;border:0;border-radius:9px;color:#9ba3b7;font-size:14px;cursor:pointer}
+.nav.active,.nav:hover{background:#242039;color:white}
+main{flex:1;padding:26px;width:100%;min-width:0}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:28px}
+h1{font-size:25px;margin-bottom:8px}
+p{color:#929aaf;font-size:14px;line-height:1.6}
+.pill{background:#183729;color:#6ee7a1;padding:8px 11px;border-radius:20px;font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:22px}
+.card{background:#11151f;border:1px solid #252a3a;border-radius:14px;padding:19px}
+.label{color:#929aaf;font-size:13px}
+.value{font-size:27px;font-weight:bold;margin-top:12px}
+.section{display:none}
+.section.active{display:block}
+.panel{background:#11151f;border:1px solid #252a3a;border-radius:14px;padding:20px;margin-bottom:16px}
+.panel h2{font-size:17px;margin-bottom:12px}
+button.primary{background:#7861ef;color:white;border:0;padding:11px 15px;border-radius:8px;cursor:pointer;font-weight:bold}
+button.secondary{background:#242938;color:white;border:1px solid #343b4e;padding:10px 13px;border-radius:8px;cursor:pointer}
+button.danger{background:#49232b;color:#ff9eab;border:0;padding:10px 13px;border-radius:8px;cursor:pointer}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+input,select{width:100%;background:#0a0d14;border:1px solid #303649;color:white;padding:12px;border-radius:8px;margin:8px 0 15px}
+label{font-size:13px;color:#c2c8d6}
+.bot{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.boticon{width:43px;height:43px;display:grid;place-items:center;background:#292343;border-radius:12px;font-size:21px}
+.botinfo{flex:1;min-width:130px}
+.botinfo strong{display:block;margin-bottom:5px}
+.status{font-size:12px;color:#f4c76b}
+.muted{color:#929aaf;font-size:12px;margin-top:14px}
+.check{display:flex;align-items:center;gap:10px;margin:15px 0}
+.check input{width:auto;margin:0;accent-color:#8b72ff}
+.notice{padding:13px;background:#292416;color:#f1d69a;border-radius:9px;font-size:13px;line-height:1.6;margin-top:15px}
+@media(max-width:700px){
+ .app{display:block}
+ aside{width:100%;padding:15px;border-right:0;border-bottom:1px solid #242838}
+ .logo{margin:0 0 12px}
+ .navs{display:flex;overflow-x:auto;gap:5px}
+ .nav{white-space:nowrap;width:auto;margin:0;padding:10px}
+ main{padding:18px 13px}
+ .grid{grid-template-columns:1fr}
+ header{align-items:flex-start}
+ h1{font-size:22px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<aside>
+  <div class="logo">Community <span>Bot.</span></div>
+  <div class="navs">
+    <button class="nav active" data-page="home">⌂ Dashboard</button>
+    <button class="nav" data-page="bots">🤖 Meus bots</button>
+    <button class="nav" data-page="commands">⌘ Comandos</button>
+    <button class="nav" data-page="settings">⚙ Configurações</button>
+  </div>
+  <p class="muted">COMMUNITY BOT · BETA</p>
+</aside>
+
+<main>
+<header>
+ <div>
+  <h1 id="title">Dashboard</h1>
+  <p>Gerencie seus bots em um só lugar.</p>
+ </div>
+ <span class="pill">● Painel Beta</span>
+</header>
+
+<section id="home" class="section active">
+ <div class="grid">
+  <div class="card"><div class="label">Bots cadastrados</div><div class="value" id="count">0</div></div>
+  <div class="card"><div class="label">Bots em execução</div><div class="value">0</div></div>
+  <div class="card"><div class="label">Plano atual</div><div class="value" style="font-size:21px">Free</div></div>
+ </div>
+ <div class="panel">
+  <h2>🚀 Comece por aqui</h2>
+  <p>Cadastre um bot para começar a organizar sua hospedagem.</p>
+  <div class="actions"><button class="primary" onclick="go('bots');document.getElementById('botName').focus()">+ Adicionar bot</button></div>
+ </div>
+ <div class="panel">
+  <h2>Informações da plataforma</h2>
+  <p>Este é o painel visual inicial. A execução real dos bots precisa ser conectada a um servidor backend.</p>
+  <div class="notice">Ainda não há conexão com o Discord nem hospedagem real. Os botões desta versão gerenciam apenas a interface local.</div>
+ </div>
+</section>
+
+<section id="bots" class="section">
+ <div class="panel">
+  <h2>Adicionar bot</h2>
+  <p>Cadastre o nome do seu projeto no painel.</p>
+  <label for="botName">Nome do bot</label>
+  <input id="botName" placeholder="Ex.: Meu Bot">
+  <label for="botDesc">Descrição</label>
+  <input id="botDesc" placeholder="O que seu bot faz?">
+  <button class="primary" onclick="addBot()">+ Cadastrar bot</button>
+  <p class="muted">Não coloque o token do Discord aqui. Este protótipo ainda não possui servidor seguro.</p>
+ </div>
+ <div class="panel">
+  <h2>Meus bots</h2>
+  <div id="botList"><p>Nenhum bot cadastrado.</p></div>
+ </div>
+</section>
+
+<section id="commands" class="section">
+ <div class="panel">
+  <h2>Configuração de comandos</h2>
+  <p>Escolha os módulos que você pretende habilitar no seu bot.</p>
+  <label class="check"><input type="checkbox"> Boas-vindas</label>
+  <label class="check"><input type="checkbox"> Moderação</label>
+  <label class="check"><input type="checkbox"> Sistema de tickets</label>
+  <label class="check"><input type="checkbox"> Autorole</label>
+  <label class="check"><input type="checkbox"> Comandos de utilidade</label>
+  <button class="primary" onclick="saveModules()">Salvar preferências</button>
+  <p id="moduleMsg" class="muted"></p>
+ </div>
+</section>
+
+<section id="settings" class="section">
+ <div class="panel">
+  <h2>Configurações</h2>
+  <label for="projectName">Nome da plataforma</label>
+  <input id="projectName" value="Community Bot">
+  <label for="theme">Tema</label>
+  <select id="theme"><option value="dark">Escuro</option><option value="purple">Roxo</option></select>
+  <button class="primary" onclick="saveSettings()">Salvar configurações</button>
+  <p id="settingsMsg" class="muted"></p>
+ </div>
+ <div class="panel">
+  <h2>Segurança</h2>
+  <p>Os tokens devem ficar guardados em variáveis secretas no servidor, nunca no HTML público.</p>
+ </div>
+</section>
+</main>
+</div>
+
+<script>
+const titles={
+ home:"Dashboard",
+ bots:"Meus bots",
+ commands:"Comandos",
+ settings:"Configurações"
+};
+function go(page){
+ document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+ document.querySelectorAll(".nav").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
+ document.getElementById(page).classList.add("active");
+ document.getElementById("title").textContent=titles[page];
+}
+document.querySelectorAll(".nav").forEach(b=>{
+ b.addEventListener("click",()=>go(b.dataset.page));
+});
+
+let bots=[];
+function addBot(){
+ const name=document.getElementById("botName").value.trim();
+ const desc=document.getElementById("botDesc").value.trim();
+ if(!name){alert("Digite o nome do bot.");return;}
+ bots.push({name,desc});
+ document.getElementById("botName").value="";
+ document.getElementById("botDesc").value="";
+ renderBots();
+}
+function renderBots(){
+ document.getElementById("count").textContent=bots.length;
+ const list=document.getElementById("botList");
+ if(!bots.length){list.innerHTML="<p>Nenhum bot cadastrado.</p>";return;}
+ list.innerHTML="";
+ bots.forEach((bot,i)=>{
+  const card=document.createElement("div");
+  card.className="panel";
+  const row=document.createElement("div");
+  row.className="bot";
+  const icon=document.createElement("div");
+  icon.className="boticon";
+  icon.textContent="🤖";
+  const info=document.createElement("div");
+  info.className="botinfo";
+  const strong=document.createElement("strong");
+  strong.textContent=bot.name;
+  const desc=document.createElement("p");
+  desc.textContent=bot.desc||"Sem descrição";
+  const status=document.createElement("span");
+  status.className="status";
+  status.textContent="● Cadastrado — não está hospedado";
+  info.append(strong,desc,status);
+  const del=document.createElement("button");
+  del.className="danger";
+  del.textContent="Excluir";
+  del.onclick=()=>{bots.splice(i,1);renderBots();};
+  row.append(icon,info,del);
+  card.append(row);
+  list.append(card);
+ });
+}
+function saveModules(){
+ document.getElementById("moduleMsg").textContent=
+ "Preferências demonstrativas. A execução exige conexão com o servidor.";
+}
+function saveSettings(){
+ const name=document.getElementById("projectName").value.trim();
+ if(name){
+  document.querySelector(".logo").textContent=name+".";
+  document.getElementById("settingsMsg").textContent="Nome atualizado nesta página.";
+ }
+ if(document.getElementById("theme").value==="purple"){
+  document.body.style.background="#110d1b";
+ }else{
+  document.body.style.background="#0a0c12";
+ }
+}
+</script>
+</body>
+</html>
